@@ -468,34 +468,31 @@ select:focus {
 }
 
 .perfect-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.perfect-card {
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255, 106, 0, 0.14), rgba(255, 255, 255, 0.04));
-}
-
-.perfect-name {
-  margin-bottom: 8px;
-  font-size: 1.1rem;
+.perfect-name-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 106, 0, 0.22);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 106, 0, 0.18), rgba(255, 255, 255, 0.04));
+  color: #fff3eb;
   font-weight: 700;
-}
-
-.perfect-total {
-  margin-bottom: 14px;
-  color: #ffd8c2;
-  font-weight: 600;
 }
 
 .week-chip-list {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.week-chip-list-compact {
+  gap: 6px;
 }
 
 .week-chip {
@@ -505,6 +502,14 @@ select:focus {
   color: var(--text);
   font-size: 0.88rem;
   font-weight: 600;
+}
+
+.week-chip-list-compact .week-chip {
+  min-width: 32px;
+  justify-content: center;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  text-align: center;
 }
 
 .search-field {

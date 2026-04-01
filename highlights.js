@@ -131,6 +131,7 @@ function createHighlightEntry(row, nameColumn, totalColumn, weekColumns) {
   const activeWeeks = weekColumns
     .filter((column) => isActiveValue(getCellValue(row, column.index)))
     .map((column) => column.label);
+  const activeWeekShortLabels = activeWeeks.map(getWeekShortLabel);
   const computedTotal = activeWeeks.length;
   const totalFromSheet = parsePositiveNumber(getCellValue(row, totalColumn ? totalColumn.index : -1));
   const total = totalFromSheet || computedTotal;
@@ -139,6 +140,7 @@ function createHighlightEntry(row, nameColumn, totalColumn, weekColumns) {
   return {
     name,
     activeWeeks,
+    activeWeekShortLabels,
     total,
     isPerfect
   };
@@ -160,17 +162,7 @@ function renderPerfectList(entries) {
 
   perfectListElement.innerHTML = entries
     .map(
-      (entry) => `
-        <article class="perfect-card">
-          <p class="perfect-name">${escapeHtml(entry.name)}</p>
-          <p class="perfect-total">${entry.total} semana${entry.total === 1 ? "" : "s"} completas</p>
-          <div class="week-chip-list">
-            ${entry.activeWeeks
-              .map((week) => `<span class="week-chip">${escapeHtml(week)}</span>`)
-              .join("")}
-          </div>
-        </article>
-      `
+      (entry) => `<span class="perfect-name-pill">${escapeHtml(entry.name)}</span>`
     )
     .join("");
 }
@@ -198,7 +190,17 @@ function renderHighlightsTable(entries) {
       (entry) => `
         <tr>
           <td>${escapeHtml(entry.name)}</td>
-          <td>${escapeHtml(entry.activeWeeks.join(", ") || "-")}</td>
+          <td>
+            ${entry.activeWeekShortLabels.length
+              ? `
+                <div class="week-chip-list week-chip-list-compact">
+                  ${entry.activeWeekShortLabels
+                    .map((week) => `<span class="week-chip">${escapeHtml(week)}</span>`)
+                    .join("")}
+                </div>
+              `
+              : "-"}
+          </td>
           <td>${entry.total}</td>
           <td>
             <span class="table-status ${entry.isPerfect ? "table-status-perfect" : ""}">
@@ -269,6 +271,12 @@ function normalizeHeader(value) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ");
+}
+
+function getWeekShortLabel(value) {
+  const label = String(value || "").trim();
+  const numberMatch = label.match(/\d+/);
+  return numberMatch ? numberMatch[0] : label;
 }
 
 function parseCsv(text) {
