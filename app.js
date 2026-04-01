@@ -1,6 +1,7 @@
 const DISTANCE_ORDER = ["3km", "5km", "10km", "21km"];
 const SHIRT_SIZE_ORDER = ["PP", "P", "M", "G", "GG"];
 const STORAGE_KEY = "kit-withdrawal-entries";
+const FLASH_MESSAGE_KEY = "kit-withdrawal-flash-message";
 const LEGACY_STORAGE_KEYS = ["kit-withdrawal-entries", "kitWithdrawalEntries"];
 const DB_NAME = "kit-withdrawal-db";
 const STORE_NAME = "entries";
@@ -52,9 +53,7 @@ form.addEventListener("submit", async (event) => {
       entries = sortEntries(await loadEntriesFromGoogleSheets());
       await clearBrowserEntries();
       render();
-      form.reset();
-      fullNameInput.focus();
-      showMessage(getSubmitMessage(syncStatus));
+      reloadWithFlashMessage("Envio OK");
       return;
     }
 
@@ -65,10 +64,14 @@ form.addEventListener("submit", async (event) => {
   entries = sortEntries([...entries, newEntry]);
   await persistEntries(entries);
   render();
-  form.reset();
-  fullNameInput.focus();
 
   const syncStatus = await syncWithGoogleSheets(newEntry);
+
+  if (syncStatus === "synced" || syncStatus === "queued" || syncStatus === "disabled" || syncStatus === "local_only") {
+    reloadWithFlashMessage("Envio OK");
+    return;
+  }
+
   showMessage(getSubmitMessage(syncStatus));
 });
 
@@ -107,11 +110,14 @@ async function initializeApp() {
     await clearBrowserEntries();
     entries = sortEntries(await loadEntriesFromGoogleSheets());
     render();
+    const flashMessage = consumeFlashMessage();
     showMessage(
+      flashMessage || (
       entries.length
         ? "Cadastros carregados do Google Sheets."
-        : "Sistema pronto. Os dados exibidos virao somente do Google Sheets."
+        : "Sistema pronto. Os dados exibidos virao somente do Google Sheets.")
     );
+    fullNameInput.focus();
     return;
   }
 
@@ -128,20 +134,26 @@ async function initializeApp() {
   await persistEntries(entries);
   render();
 
+  const flashMessage = consumeFlashMessage();
+
   if (entries.length) {
     showMessage(
+      flashMessage || (
       isGoogleScriptConfigured()
         ? "Cadastros carregados com sucesso."
-        : getLocalStorageHint()
+        : getLocalStorageHint())
     );
+    fullNameInput.focus();
     return;
   }
 
   showMessage(
+    flashMessage || (
     isGoogleScriptConfigured()
       ? "Sistema pronto para receber cadastros."
-      : getLocalStorageHint()
+      : getLocalStorageHint())
   );
+  fullNameInput.focus();
 }
 
 function getSubmitMessage(syncStatus) {
@@ -543,6 +555,31 @@ function render() {
 function showMessage(text, isError = false) {
   messageElement.textContent = text;
   messageElement.style.color = isError ? "#9f2d2d" : "#14483e";
+}
+
+function reloadWithFlashMessage(message) {
+  try {
+    sessionStorage.setItem(FLASH_MESSAGE_KEY, message);
+  } catch (error) {
+    console.error("Erro ao salvar mensagem temporaria:", error);
+  }
+
+  window.location.reload();
+}
+
+function consumeFlashMessage() {
+  try {
+    const message = sessionStorage.getItem(FLASH_MESSAGE_KEY);
+    if (!message) {
+      return "";
+    }
+
+    sessionStorage.removeItem(FLASH_MESSAGE_KEY);
+    return message;
+  } catch (error) {
+    console.error("Erro ao recuperar mensagem temporaria:", error);
+    return "";
+  }
 }
 
 function escapeCsvValue(value) {
