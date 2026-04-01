@@ -1,7 +1,6 @@
 const DISTANCE_ORDER = ["3km", "5km", "10km", "21km"];
 const SHIRT_SIZE_ORDER = ["PP", "P", "M", "G", "GG"];
 const STORAGE_KEY = "kit-withdrawal-entries";
-const FLASH_MESSAGE_KEY = "kit-withdrawal-flash-message";
 const LEGACY_STORAGE_KEYS = ["kit-withdrawal-entries", "kitWithdrawalEntries"];
 const DB_NAME = "kit-withdrawal-db";
 const STORE_NAME = "entries";
@@ -20,14 +19,24 @@ const shirtSummaryContainer = document.getElementById("shirt-summary");
 const tableBody = document.getElementById("entries-table-body");
 const totalCountElement = document.getElementById("total-count");
 const exportButton = document.getElementById("export-button");
+const submitButton = form.querySelector('button[type="submit"]');
+const statusBox = document.getElementById("status-box");
+const statusBoxTitle = document.getElementById("status-box-title");
+const statusBoxText = document.getElementById("status-box-text");
+const statusSpinner = document.getElementById("status-spinner");
 
 let entries = [];
+let statusHideTimeoutId = null;
 
 render();
 initializeApp();
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  if (isFormDisabled()) {
+    return;
+  }
 
   const fullName = fullNameInput.value.trim().replace(/\s+/g, " ");
   const distance = distanceInput.value;
@@ -46,33 +55,90 @@ form.addEventListener("submit", async (event) => {
     createdAt: new Date().toISOString()
   };
 
-  if (shouldUseGoogleSheetsAsSingleSource()) {
-    const syncStatus = await syncWithGoogleSheets(newEntry);
+  setFormDisabled(true);
+  showStatus({
+    title: "Enviando dados...",
+    text: "Aguarde enquanto atualizamos a planilha e recarregamos a lista.",
+    busy: true
+  });
 
-    if (syncStatus === "synced" || syncStatus === "queued") {
-      entries = sortEntries(await loadEntriesFromGoogleSheets());
-      await clearBrowserEntries();
-      render();
-      reloadWithFlashMessage("Envio OK");
+  try {
+    if (shouldUseGoogleSheetsAsSingleSource()) {
+      const syncStatus = await syncWithGoogleSheets(newEntry);
+
+      if (syncStatus === "synced" || syncStatus === "queued") {
+        const refreshedEntries = await refreshEntriesFromGoogleSheets(newEntry);
+
+        if (refreshedEntries) {
+          entries = refreshedEntries;
+          await clearBrowserEntries();
+          render();
+          resetFormAfterSubmit();
+          showMessage("Dados enviados com sucesso.");
+          showStatus({
+            title: "Dados enviados com sucesso",
+            text: "A lista foi atualizada com as informacoes mais recentes da planilha.",
+            tone: "success",
+            hideAfterMs: 4000
+          });
+          return;
+        }
+      }
+
+      showMessage("Nao foi possivel confirmar a atualizacao da planilha.", true);
+      showStatus({
+        title: "Falha ao atualizar",
+        text: "Os dados nao puderam ser confirmados na planilha agora. Verifique o Apps Script e tente novamente.",
+        tone: "error"
+      });
       return;
     }
 
-    showMessage("Nao foi possivel salvar no Google Sheets. Confira a URL do Apps Script publicado.", true);
-    return;
+    entries = sortEntries([...entries, newEntry]);
+    await persistEntries(entries);
+    render();
+
+    const syncStatus = await syncWithGoogleSheets(newEntry);
+
+    if (syncStatus === "synced" || syncStatus === "queued") {
+      const refreshedEntries = await refreshEntriesFromGoogleSheets(newEntry);
+
+      if (refreshedEntries) {
+        entries = sortEntries(mergeEntries(entries, refreshedEntries));
+        await persistEntries(entries);
+        render();
+      }
+    }
+
+    if (syncStatus === "synced" || syncStatus === "queued" || syncStatus === "disabled" || syncStatus === "local_only") {
+      resetFormAfterSubmit();
+      showMessage(getSubmitMessage(syncStatus));
+      showStatus({
+        title: "Dados enviados com sucesso",
+        text: "O cadastro foi processado e a lista ja foi atualizada na tela.",
+        tone: "success",
+        hideAfterMs: 4000
+      });
+      return;
+    }
+
+    showMessage(getSubmitMessage(syncStatus), true);
+    showStatus({
+      title: "Falha ao enviar dados",
+      text: getSubmitMessage(syncStatus),
+      tone: "error"
+    });
+  } catch (error) {
+    console.error("Erro ao enviar cadastro:", error);
+    showMessage("Nao foi possivel concluir o envio agora.", true);
+    showStatus({
+      title: "Falha ao enviar dados",
+      text: "Tivemos um problema ao processar o cadastro. Tente novamente em alguns instantes.",
+      tone: "error"
+    });
+  } finally {
+    setFormDisabled(false);
   }
-
-  entries = sortEntries([...entries, newEntry]);
-  await persistEntries(entries);
-  render();
-
-  const syncStatus = await syncWithGoogleSheets(newEntry);
-
-  if (syncStatus === "synced" || syncStatus === "queued" || syncStatus === "disabled" || syncStatus === "local_only") {
-    reloadWithFlashMessage("Envio OK");
-    return;
-  }
-
-  showMessage(getSubmitMessage(syncStatus));
 });
 
 exportButton.addEventListener("click", () => {
@@ -104,56 +170,70 @@ exportButton.addEventListener("click", () => {
 });
 
 async function initializeApp() {
-  showMessage("Carregando cadastros salvos...");
+  showMessage("Carregando cadastros...");
+  setFormDisabled(true);
+  showStatus({
+    title: "Carregando informacoes...",
+    text: "Aguarde enquanto buscamos os dados mais recentes da planilha.",
+    busy: true
+  });
 
-  if (shouldUseGoogleSheetsAsSingleSource()) {
-    await clearBrowserEntries();
-    entries = sortEntries(await loadEntriesFromGoogleSheets());
+  try {
+    if (shouldUseGoogleSheetsAsSingleSource()) {
+      entries = sortEntries(await loadEntriesFromGoogleSheets({ throwOnError: true }));
+      await clearBrowserEntries();
+      render();
+      showMessage(
+        entries.length
+          ? "Cadastros carregados do Google Sheets."
+          : "Sistema pronto. Os dados exibidos virao somente do Google Sheets."
+      );
+      hideStatus();
+      fullNameInput.focus();
+      return;
+    }
+
+    const localEntries = loadEntriesFromLocalStorage();
+    const indexedDbEntries = await loadEntriesFromIndexedDB();
+    let mergedEntries = mergeEntries(localEntries, indexedDbEntries);
+
+    if (isGoogleScriptConfigured()) {
+      const remoteEntries = await loadEntriesFromGoogleSheets();
+      mergedEntries = mergeEntries(mergedEntries, remoteEntries);
+    }
+
+    entries = sortEntries(mergedEntries);
+    await persistEntries(entries);
     render();
-    const flashMessage = consumeFlashMessage();
+
     showMessage(
-      flashMessage || (
       entries.length
-        ? "Cadastros carregados do Google Sheets."
-        : "Sistema pronto. Os dados exibidos virao somente do Google Sheets.")
+        ? (
+          isGoogleScriptConfigured()
+            ? "Cadastros carregados com sucesso."
+            : getLocalStorageHint()
+        )
+        : (
+          isGoogleScriptConfigured()
+            ? "Sistema pronto para receber cadastros."
+            : getLocalStorageHint()
+        )
     );
+    hideStatus();
     fullNameInput.focus();
-    return;
+  } catch (error) {
+    console.error("Erro ao inicializar a pagina:", error);
+    entries = [];
+    render();
+    showMessage("Nao foi possivel carregar os dados da planilha.", true);
+    showStatus({
+      title: "Nao foi possivel carregar as informacoes",
+      text: "Verifique a conexao e a configuracao do Google Apps Script para tentar novamente.",
+      tone: "error"
+    });
+  } finally {
+    setFormDisabled(false);
   }
-
-  const localEntries = loadEntriesFromLocalStorage();
-  const indexedDbEntries = await loadEntriesFromIndexedDB();
-  let mergedEntries = mergeEntries(localEntries, indexedDbEntries);
-
-  if (isGoogleScriptConfigured()) {
-    const remoteEntries = await loadEntriesFromGoogleSheets();
-    mergedEntries = mergeEntries(mergedEntries, remoteEntries);
-  }
-
-  entries = sortEntries(mergedEntries);
-  await persistEntries(entries);
-  render();
-
-  const flashMessage = consumeFlashMessage();
-
-  if (entries.length) {
-    showMessage(
-      flashMessage || (
-      isGoogleScriptConfigured()
-        ? "Cadastros carregados com sucesso."
-        : getLocalStorageHint())
-    );
-    fullNameInput.focus();
-    return;
-  }
-
-  showMessage(
-    flashMessage || (
-    isGoogleScriptConfigured()
-      ? "Sistema pronto para receber cadastros."
-      : getLocalStorageHint())
-  );
-  fullNameInput.focus();
 }
 
 function getSubmitMessage(syncStatus) {
@@ -162,7 +242,11 @@ function getSubmitMessage(syncStatus) {
   }
 
   if (syncStatus === "queued") {
-    return "Cadastro salvo no navegador. O envio para o Google Sheets foi feito em modo simples.";
+    return "Cadastro enviado. Estamos aguardando a planilha refletir a atualizacao.";
+  }
+
+  if (syncStatus === "local_only") {
+    return "Cadastro salvo localmente, mas nao foi possivel atualizar a planilha agora.";
   }
 
   if (looksLikeSpreadsheetUrl(GOOGLE_SCRIPT_URL)) {
@@ -342,7 +426,9 @@ async function deleteIndexedDBDatabase() {
   }
 }
 
-async function loadEntriesFromGoogleSheets() {
+async function loadEntriesFromGoogleSheets(options = {}) {
+  const { throwOnError = false } = options;
+
   if (!isGoogleScriptConfigured()) {
     return [];
   }
@@ -359,6 +445,9 @@ async function loadEntriesFromGoogleSheets() {
     return Array.isArray(data.entries) ? data.entries.map(normalizeEntry) : [];
   } catch (error) {
     console.error("Erro ao carregar dados do Google Sheets:", error);
+    if (throwOnError) {
+      throw error;
+    }
     return [];
   }
 }
@@ -554,32 +643,7 @@ function render() {
 
 function showMessage(text, isError = false) {
   messageElement.textContent = text;
-  messageElement.style.color = isError ? "#9f2d2d" : "#14483e";
-}
-
-function reloadWithFlashMessage(message) {
-  try {
-    sessionStorage.setItem(FLASH_MESSAGE_KEY, message);
-  } catch (error) {
-    console.error("Erro ao salvar mensagem temporaria:", error);
-  }
-
-  window.location.reload();
-}
-
-function consumeFlashMessage() {
-  try {
-    const message = sessionStorage.getItem(FLASH_MESSAGE_KEY);
-    if (!message) {
-      return "";
-    }
-
-    sessionStorage.removeItem(FLASH_MESSAGE_KEY);
-    return message;
-  } catch (error) {
-    console.error("Erro ao recuperar mensagem temporaria:", error);
-    return "";
-  }
+  messageElement.style.color = isError ? "#ffd0d0" : "#d8ffef";
 }
 
 function escapeCsvValue(value) {
@@ -614,4 +678,95 @@ function looksLikeSpreadsheetUrl(url) {
 
 function shouldUseGoogleSheetsAsSingleSource() {
   return GOOGLE_SHEETS_ONLY_MODE && isGoogleScriptConfigured();
+}
+
+async function refreshEntriesFromGoogleSheets(expectedEntry, options = {}) {
+  const {
+    attempts = 8,
+    delayMs = 700
+  } = options;
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const remoteEntries = sortEntries(
+      await loadEntriesFromGoogleSheets({ throwOnError: attempt === attempts - 1 })
+    );
+
+    if (!expectedEntry || containsEntry(remoteEntries, expectedEntry)) {
+      return remoteEntries;
+    }
+
+    if (attempt < attempts - 1) {
+      await wait(delayMs);
+    }
+  }
+
+  return null;
+}
+
+function containsEntry(list, expectedEntry) {
+  const expectedFingerprint = createEntryFingerprint(expectedEntry);
+
+  return list.some((entry) =>
+    entry.id === expectedEntry.id || createEntryFingerprint(entry) === expectedFingerprint
+  );
+}
+
+function resetFormAfterSubmit() {
+  form.reset();
+  fullNameInput.focus();
+}
+
+function setFormDisabled(disabled) {
+  [fullNameInput, distanceInput, shirtSizeInput, submitButton, exportButton].forEach((element) => {
+    if (element) {
+      element.disabled = disabled;
+    }
+  });
+}
+
+function isFormDisabled() {
+  return Boolean(submitButton && submitButton.disabled);
+}
+
+function showStatus(options = {}) {
+  const {
+    title = "",
+    text = "",
+    tone = "info",
+    busy = false,
+    hideAfterMs = 0
+  } = options;
+
+  clearStatusHideTimeout();
+  statusBox.className = `status-box status-box-${tone}`;
+  statusBoxTitle.textContent = title;
+  statusBoxText.textContent = text;
+  statusBoxText.hidden = !text;
+  statusSpinner.classList.toggle("status-spinner-hidden", !busy);
+
+  if (hideAfterMs > 0) {
+    statusHideTimeoutId = window.setTimeout(() => {
+      hideStatus();
+    }, hideAfterMs);
+  }
+}
+
+function hideStatus() {
+  clearStatusHideTimeout();
+  statusBox.className = "status-box status-box-hidden";
+  statusSpinner.classList.remove("status-spinner-hidden");
+  statusBoxText.hidden = false;
+}
+
+function clearStatusHideTimeout() {
+  if (statusHideTimeoutId) {
+    window.clearTimeout(statusHideTimeoutId);
+    statusHideTimeoutId = null;
+  }
+}
+
+function wait(durationMs) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, durationMs);
+  });
 }

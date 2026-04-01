@@ -11,6 +11,16 @@
 </head>
 <body>
   <main class="page">
+    <div id="status-box" class="status-box status-box-hidden" role="status" aria-live="polite" aria-atomic="true">
+      <div class="status-box-panel">
+        <span id="status-spinner" class="status-spinner" aria-hidden="true"></span>
+        <div class="status-box-copy">
+          <p id="status-box-title" class="status-box-title">Carregando informacoes...</p>
+          <p id="status-box-text" class="status-box-text">Aguarde enquanto buscamos os dados da planilha.</p>
+        </div>
+      </div>
+    </div>
+
     <nav class="top-nav" aria-label="Navegacao principal">
       <a href="index.html" class="nav-link">Pagina inicial</a>
       <a href="destaques-semanais.html" class="nav-link">Destaques Semanais</a>
