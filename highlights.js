@@ -33,7 +33,7 @@ async function loadHighlightsFromSheet() {
   }
 
   try {
-    setSheetStatus("Carregando planilha...");
+    setSheetStatus("Carregando informações...");
     const csvUrl = buildCsvUrl(HIGHLIGHTS_SHEET_URL);
     const response = await fetch(`${csvUrl}${csvUrl.includes("?") ? "&" : "?"}ts=${Date.now()}`);
 
@@ -52,7 +52,7 @@ async function loadHighlightsFromSheet() {
     });
     renderPerfectList(parsedSheet.entries.filter((entry) => entry.isPerfect));
     renderHighlightsTable(filterEntries(searchInputElement.value));
-    setSheetStatus("Planilha conectada");
+    setSheetStatus("Informações Atualizadas");
   } catch (error) {
     console.error("Erro ao carregar destaques semanais:", error);
     highlightEntries = [];

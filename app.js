@@ -77,7 +77,7 @@ form.addEventListener("submit", async (event) => {
           showMessage("Dados enviados com sucesso.");
           showStatus({
             title: "Dados enviados com sucesso",
-            text: "A lista foi atualizada com as informacoes mais recentes da planilha.",
+            text: "A lista foi atualizada com as informações mais recentes.",
             tone: "success",
             hideAfterMs: 4000
           });
@@ -85,7 +85,7 @@ form.addEventListener("submit", async (event) => {
         }
       }
 
-      showMessage("Nao foi possivel confirmar a atualizacao da planilha.", true);
+      showMessage("Não foi possivel confirmar a atualização da planilha.", true);
       showStatus({
         title: "Falha ao atualizar",
         text: "Os dados nao puderam ser confirmados na planilha agora. Verifique o Apps Script e tente novamente.",
@@ -173,8 +173,8 @@ async function initializeApp() {
   showMessage("Carregando cadastros...");
   setFormDisabled(true);
   showStatus({
-    title: "Carregando informacoes...",
-    text: "Aguarde enquanto buscamos os dados mais recentes da planilha.",
+    title: "Carregando informações...",
+    text: "Aguarde enquanto buscamos os dados mais recentes.",
     busy: true
   });
 
