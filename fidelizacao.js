@@ -16,9 +16,6 @@ const fidelitySearchInputElement = document.getElementById("fidelity-search");
 const fidelityTableBodyElement = document.getElementById("fidelity-table-body");
 const fidelityCardListElement = document.getElementById("fidelity-card-list");
 const fidelityTableHeadingElement = document.getElementById("fidelity-table-heading");
-const fidelityTotalAthletesElement = document.getElementById("fidelity-total-athletes");
-const fidelityTotalBalanceElement = document.getElementById("fidelity-total-balance");
-const fidelityExpiringCountElement = document.getElementById("fidelity-expiring-count");
 
 let fidelityEntries = [];
 let fidelityPlans = [];
@@ -157,19 +154,9 @@ function parseFidelityCsv(csvContent) {
 function renderFidelity() {
   const filteredEntries = filterFidelityEntries(fidelityEntries);
 
-  renderFidelityStats(filteredEntries);
   renderFidelityTable(filteredEntries);
   renderFidelityCards(filteredEntries);
   renderFidelityHeading(filteredEntries.length);
-}
-
-function renderFidelityStats(entries) {
-  const totalBalance = entries.reduce((sum, entry) => sum + entry.balanceValue, 0);
-  const expiringSoon = entries.filter((entry) => entry.status === "expiring").length;
-
-  fidelityTotalAthletesElement.textContent = String(entries.length);
-  fidelityTotalBalanceElement.textContent = formatCurrency(totalBalance);
-  fidelityExpiringCountElement.textContent = String(expiringSoon);
 }
 
 function renderFidelityTable(entries) {
@@ -312,9 +299,6 @@ function filterFidelityEntries(entries) {
 }
 
 function renderFidelityEmptyState(message) {
-  fidelityTotalAthletesElement.textContent = "0";
-  fidelityTotalBalanceElement.textContent = "R$ 0,00";
-  fidelityExpiringCountElement.textContent = "0";
   fidelityTableHeadingElement.textContent = "Todos os planos de fidelização";
 
   fidelityTableBodyElement.innerHTML = `
@@ -351,22 +335,7 @@ function getFidelityStatus(validityDate) {
 }
 
 function sortFidelityEntries(first, second) {
-  const statusDiff = getStatusWeight(first.status) - getStatusWeight(second.status);
-  if (statusDiff !== 0) {
-    return statusDiff;
-  }
-
-  const planDiff = sortPlans(first.plan, second.plan);
-  if (planDiff !== 0) {
-    return planDiff;
-  }
-
   return first.athlete.localeCompare(second.athlete, "pt-BR", { sensitivity: "base" });
-}
-
-function getStatusWeight(status) {
-  const order = { expiring: 0, active: 1, unknown: 2, expired: 3 };
-  return Object.prototype.hasOwnProperty.call(order, status) ? order[status] : 99;
 }
 
 function sortPlans(first, second) {
