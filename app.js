@@ -1,4 +1,4 @@
-const DISTANCE_ORDER = ["3km", "5km", "10km", "21km"];
+const DEFAULT_DISTANCE_OPTIONS = ["3km", "5km", "10km", "21km"];
 const SHIRT_SIZE_ORDER = ["PP", "P", "M", "G", "GG"];
 const STORAGE_KEY = "kit-withdrawal-entries";
 const LEGACY_STORAGE_KEYS = ["kit-withdrawal-entries", "kitWithdrawalEntries"];
@@ -7,10 +7,11 @@ const STORE_NAME = "entries";
 const GOOGLE_SHEETS_ONLY_MODE = true;
 
 // Para persistencia real entre acessos e aparelhos, publique o Apps Script e cole a URL abaixo.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpnGjHiV8bDvK9Hia6Fk67evAgJLUdektoQpUIaJzFyjP1jZZIxszEntAdY3VbzfL6/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLuQlpLIMw2j0s4sc0Ytjwt3WAQEjqfM4Avgrwtr8baNuh1nXZLphqFbiz18BCMhHR/exec";
 
 const form = document.getElementById("kit-form");
 const fullNameInput = document.getElementById("fullName");
+const athleteSuggestionList = document.getElementById("athlete-name-suggestions");
 const distanceInput = document.getElementById("distance");
 const shirtSizeInput = document.getElementById("shirtSize");
 const messageElement = document.getElementById("form-message");
@@ -24,10 +25,13 @@ const statusBox = document.getElementById("status-box");
 const statusBoxTitle = document.getElementById("status-box-title");
 const statusBoxText = document.getElementById("status-box-text");
 const statusSpinner = document.getElementById("status-spinner");
+const preloadedAthleteNames = Array.isArray(window.KIT_ATHLETE_NAMES) ? window.KIT_ATHLETE_NAMES : [];
 
 let entries = [];
+let distanceOptions = [...DEFAULT_DISTANCE_OPTIONS];
 let statusHideTimeoutId = null;
 
+renderDistanceOptions();
 render();
 initializeApp();
 
@@ -148,7 +152,7 @@ exportButton.addEventListener("click", () => {
   }
 
   const csvLines = [
-    ["Nome completo", "Distancia", "Tamanho da camisa"],
+    ["Nome completo", "Distância", "Tamanho da camisa"],
     ...sortEntries([...entries]).map((entry) => [entry.fullName, entry.distance, entry.shirtSize])
   ];
 
@@ -285,6 +289,43 @@ function loadEntriesFromLocalStorage() {
 
 function saveEntriesToLocalStorage(nextEntries) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(nextEntries));
+}
+
+function normalizeDistanceOptions(options) {
+  const uniqueOptions = new Set();
+
+  return (Array.isArray(options) ? options : [])
+    .map((option) => String(option || "").trim())
+    .filter((option) => {
+      if (!option || uniqueOptions.has(option)) {
+        return false;
+      }
+
+      uniqueOptions.add(option);
+      return true;
+    });
+}
+
+function setDistanceOptions(nextOptions) {
+  const normalizedOptions = normalizeDistanceOptions(nextOptions);
+  distanceOptions = normalizedOptions.length ? normalizedOptions : [...DEFAULT_DISTANCE_OPTIONS];
+  renderDistanceOptions();
+}
+
+function renderDistanceOptions() {
+  if (!distanceInput) {
+    return;
+  }
+
+  const currentValue = distanceInput.value;
+  distanceInput.innerHTML = [
+    '<option value="">Selecione</option>',
+    ...distanceOptions.map((distance) => `<option value="${escapeHtmlAttribute(distance)}">${escapeHtml(distance)}</option>`)
+  ].join("");
+
+  if (distanceOptions.includes(currentValue)) {
+    distanceInput.value = currentValue;
+  }
 }
 
 async function loadEntriesFromIndexedDB() {
@@ -442,6 +483,9 @@ async function loadEntriesFromGoogleSheets(options = {}) {
     }
 
     const data = await response.json();
+    if (Array.isArray(data.distanceOptions)) {
+      setDistanceOptions(data.distanceOptions);
+    }
     return Array.isArray(data.entries) ? data.entries.map(normalizeEntry) : [];
   } catch (error) {
     console.error("Erro ao carregar dados do Google Sheets:", error);
@@ -534,7 +578,7 @@ function createEntryFingerprint(entry) {
 
 function sortEntries(list) {
   return [...list].sort((first, second) => {
-    const distanceDiff = DISTANCE_ORDER.indexOf(first.distance) - DISTANCE_ORDER.indexOf(second.distance);
+    const distanceDiff = getDistanceWeight(first.distance) - getDistanceWeight(second.distance);
     if (distanceDiff !== 0) {
       return distanceDiff;
     }
@@ -543,8 +587,21 @@ function sortEntries(list) {
   });
 }
 
+function getDistanceWeight(distance) {
+  const index = distanceOptions.indexOf(String(distance || "").trim());
+  return index === -1 ? distanceOptions.length + 999 : index;
+}
+
 function groupEntriesByDistance(list) {
-  return DISTANCE_ORDER.map((distance) => ({
+  const configuredOptions = [...distanceOptions];
+  const additionalOptions = [...new Set(
+    list
+      .map((entry) => String(entry.distance || "").trim())
+      .filter(Boolean)
+      .filter((distance) => !configuredOptions.includes(distance))
+  )].sort((first, second) => first.localeCompare(second, "pt-BR", { sensitivity: "base" }));
+
+  return [...configuredOptions, ...additionalOptions].map((distance) => ({
     distance,
     items: list
       .filter((entry) => entry.distance === distance)
@@ -575,6 +632,7 @@ function render() {
   const groupedEntries = groupEntriesByDistance(sortedEntries);
   const shirtSummary = getShirtSizeSummary(sortedEntries);
 
+  updateAthleteNameSuggestions(sortedEntries);
   totalCountElement.textContent = `${sortedEntries.length} inscrito${sortedEntries.length === 1 ? "" : "s"}`;
 
   groupsContainer.innerHTML = groupedEntries
@@ -584,7 +642,7 @@ function render() {
           <article class="distance-card">
             <h3>${group.distance}</h3>
             <p class="distance-count">0 atletas</p>
-            <p class="empty-state">Nenhum nome cadastrado nessa distancia ainda.</p>
+            <p class="empty-state">Nenhum nome cadastrado nessa distância.</p>
           </article>
         `;
       }
@@ -641,6 +699,35 @@ function render() {
       `;
 }
 
+function updateAthleteNameSuggestions(currentEntries) {
+  if (!athleteSuggestionList) {
+    return;
+  }
+
+  const names = getSuggestedAthleteNames();
+  athleteSuggestionList.innerHTML = names
+    .map((name) => `<option value="${escapeHtmlAttribute(name)}"></option>`)
+    .join("");
+}
+
+function getSuggestedAthleteNames() {
+  const uniqueNames = new Map();
+
+  preloadedAthleteNames
+    .map((name) => String(name || "").trim().replace(/\s+/g, " "))
+    .filter(Boolean)
+    .forEach((name) => {
+      const normalizedKey = name.toLocaleLowerCase("pt-BR");
+      if (!uniqueNames.has(normalizedKey)) {
+        uniqueNames.set(normalizedKey, name);
+      }
+    });
+
+  return [...uniqueNames.values()].sort((first, second) =>
+    first.localeCompare(second, "pt-BR", { sensitivity: "base" })
+  );
+}
+
 function showMessage(text, isError = false) {
   messageElement.textContent = text;
   messageElement.style.color = isError ? "#ffd0d0" : "#d8ffef";
@@ -658,6 +745,10 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function escapeHtmlAttribute(value) {
+  return escapeHtml(value).replace(/`/g, "&#96;");
 }
 
 function createEntryId() {
@@ -713,6 +804,7 @@ function containsEntry(list, expectedEntry) {
 
 function resetFormAfterSubmit() {
   form.reset();
+  renderDistanceOptions();
   fullNameInput.focus();
 }
 

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos de Fidelização VC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="top-nav" aria-label="Navegação principal">
+      <a href="index.html" class="nav-link">Página inicial</a>
+      <a href="retirada-kits.html" class="nav-link">Retirada de Kits</a>
+      <a href="destaques-semanais.html" class="nav-link">Destaques Semanais</a>
+      <a href="ranking-circuito-riograndino.html" class="nav-link">Ranking Circuito</a>
+      <a href="calendario-provas.html" class="nav-link">Calendário de Provas</a>
+    </nav>
+
+    <section class="brand-banner">
+      <div class="brand-pill">
+        <img src="assets/logo-vida-corrida.jpeg" alt="Logo Vida Corrida" class="brand-logo">
+        <div>
+          <p class="brand-name">VIDA CORRIDA</p>
+          <p class="brand-subtitle">"Os desafios nos definem."</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel fidelity-hero">
+      <p class="eyebrow">Área 5</p>
+      <h1>Planos de Fidelização</h1>
+      <p class="hero-text">
+        Acompanhe o plano contratado por cada atleta, o período vigente e o saldo de desconto disponível para usar na VC Store.
+      </p>
+      <div class="hero-highlight">
+        <span class="highlight-label">VC Store</span>
+        <p>Ideal para consultar rapidamente quem ainda tem benefício disponível e quais planos estão perto do vencimento.</p>
+      </div>
+    </section>
+
+    <section class="panel fidelity-controls-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Filtros</p>
+          <h2>Visualize os planos do jeito que precisar</h2>
+        </div>
+        <span id="fidelity-sheet-status" class="count-badge">Aguardando planilha</span>
+      </div>
+
+      <div class="ranking-filters-stack">
+        <div class="ranking-filter-block">
+          <p class="ranking-filter-label">Tipo de plano</p>
+          <div id="fidelity-plan-buttons" class="ranking-category-chips">
+            <button type="button" class="toggle-button toggle-button-active" data-plan="all">Todos os planos</button>
+          </div>
+        </div>
+
+        <div class="ranking-filter-block">
+          <p class="ranking-filter-label">Situação</p>
+          <div id="fidelity-status-buttons" class="ranking-category-chips">
+            <button type="button" class="toggle-button toggle-button-active" data-status="all">Todas</button>
+            <button type="button" class="toggle-button" data-status="active">Ativos</button>
+            <button type="button" class="toggle-button" data-status="expiring">Vencendo</button>
+            <button type="button" class="toggle-button" data-status="expired">Encerrados</button>
+          </div>
+        </div>
+
+        <label class="field ranking-search-field">
+          <span>Buscar atleta</span>
+          <input id="fidelity-search" type="text" placeholder="Digite um nome para filtrar">
+        </label>
+      </div>
+    </section>
+
+    <section class="panel fidelity-stats-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Resumo</p>
+          <h2>Panorama da fidelização</h2>
+        </div>
+      </div>
+
+      <div id="fidelity-stat-grid" class="highlights-stat-grid">
+        <article class="distance-card fidelity-stat-card">
+          <p class="fidelity-stat-label">Atletas exibidos</p>
+          <strong id="fidelity-total-athletes" class="fidelity-stat-value">0</strong>
+        </article>
+
+        <article class="distance-card fidelity-stat-card">
+          <p class="fidelity-stat-label">Saldo disponível</p>
+          <strong id="fidelity-total-balance" class="fidelity-stat-value">R$ 0,00</strong>
+        </article>
+
+        <article class="distance-card fidelity-stat-card">
+          <p class="fidelity-stat-label">Vencendo em 30 dias</p>
+          <strong id="fidelity-expiring-count" class="fidelity-stat-value">0</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel table-panel fidelity-table-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Planos</p>
+          <h2 id="fidelity-table-heading">Todos os planos de fidelização</h2>
+        </div>
+      </div>
+
+      <div class="table-wrapper fidelity-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Atleta</th>
+              <th>Plano</th>
+              <th>Início</th>
+              <th>Término</th>
+              <th>Utilizado</th>
+              <th>Saldo</th>
+              <th>Vigência até</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="fidelity-table-body">
+            <tr>
+              <td colspan="8">Conecte a planilha em fidelizacao.js para visualizar os planos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="fidelity-card-list" class="fidelity-card-list">
+        <article class="fidelity-athlete-card">
+          <p class="ranking-card-empty">Conecte a planilha em fidelizacao.js para visualizar os planos.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="fidelizacao.js"></script>
+</body>
+</html>

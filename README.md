@@ -43,3 +43,27 @@ Importante:
 - URL correta: `https://script.google.com/macros/s/.../exec`
 
 Se quiser usar somente os dados da planilha, deixe `GOOGLE_SHEETS_ONLY_MODE = true` no arquivo `app.js`.
+
+## Telegram opcional
+
+O Apps Script deste projeto tambem pode enviar um relatorio atualizado para o Telegram sempre que um novo cadastro for recebido.
+
+No editor do Apps Script, configure as propriedades em `Configuracoes do projeto > Propriedades do script`:
+
+- `TELEGRAM_ENABLED`: `true` ou `false`
+- `TELEGRAM_BOT_TOKEN`: token do bot
+- `TELEGRAM_CHAT_ID`: id do grupo, canal ou conversa
+- `DISTANCE_OPTIONS`: distancias na ordem desejada, por exemplo `5km, 10km`
+
+Assim o token nao fica exposto no codigo do site nem no repositorio.
+
+## Distancias configuraveis
+
+As opcoes de distancia podem ficar em um unico lugar nas `Propriedades do script` do Apps Script.
+
+Exemplos:
+
+- `DISTANCE_OPTIONS = 5km, 10km`
+- `DISTANCE_OPTIONS = 3km, 5km, 10km, 21km`
+
+Depois de alterar essa propriedade, publique uma nova versao do aplicativo da web para a pagina carregar as novas opcoes automaticamente.
