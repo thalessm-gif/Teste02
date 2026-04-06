@@ -681,10 +681,19 @@ button:disabled {
 }
 
 .fidelity-hero,
-.fidelity-controls-panel,
-.fidelity-stats-panel {
+.fidelity-controls-panel {
   padding: 24px;
   margin-bottom: 24px;
+}
+
+.fidelity-store-highlight {
+  display: block;
+  text-decoration: none;
+}
+
+.fidelity-store-highlight:hover {
+  transform: translateY(-1px);
+  border-left-color: #43c9a8;
 }
 
 .calendar-hero,
@@ -1118,24 +1127,6 @@ button:disabled {
 .fidelity-meta-value {
   display: block;
   line-height: 1.4;
-}
-
-.fidelity-stat-card {
-  min-height: 132px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.fidelity-stat-label {
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.fidelity-stat-value {
-  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
-  line-height: 1.1;
 }
 
 .fidelity-status-pill {
