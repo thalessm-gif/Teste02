@@ -172,6 +172,22 @@ body {
   color: #fff7ed;
 }
 
+.feature-card-referral {
+  border-color: rgba(255, 163, 96, 0.28);
+  background:
+    radial-gradient(circle at top left, rgba(255, 166, 82, 0.18), transparent 30%),
+    linear-gradient(135deg, rgba(140, 74, 16, 0.34), rgba(255, 255, 255, 0.05));
+}
+
+.feature-card-referral .feature-tag {
+  background: rgba(255, 177, 108, 0.16);
+  color: #ffe5ca;
+}
+
+.feature-card-referral .feature-link {
+  color: #fff1e4;
+}
+
 .feature-card-calendar {
   border-color: rgba(99, 214, 255, 0.24);
   background:
@@ -202,6 +218,22 @@ body {
 
 .feature-card-fidelity .feature-link {
   color: #ddfff6;
+}
+
+.feature-card-coaches {
+  border-color: rgba(255, 145, 78, 0.28);
+  background:
+    radial-gradient(circle at top left, rgba(255, 106, 0, 0.18), transparent 30%),
+    linear-gradient(135deg, rgba(17, 63, 107, 0.62), rgba(255, 255, 255, 0.05));
+}
+
+.feature-card-coaches .feature-tag {
+  background: rgba(255, 177, 108, 0.16);
+  color: #ffe6d2;
+}
+
+.feature-card-coaches .feature-link {
+  color: #fff4eb;
 }
 
 .feature-card-plans {
@@ -680,10 +712,183 @@ button:disabled {
   margin-bottom: 24px;
 }
 
+.regulation-link-card {
+  display: block;
+  max-width: 560px;
+  margin: 0 0 24px;
+  text-decoration: none;
+}
+
+.regulation-link-card:hover {
+  transform: translateY(-1px);
+  border-left-color: #43c9a8;
+}
+
+.regulation-hero {
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.regulation-panel {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+}
+
+.regulation-section {
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+}
+
+.regulation-section p:last-child,
+.regulation-section ul:last-child,
+.regulation-section ol:last-child {
+  margin-bottom: 0;
+}
+
+.regulation-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.regulation-summary-card {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+.regulation-summary-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.regulation-summary-card strong {
+  line-height: 1.45;
+}
+
+.regulation-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 12px;
+  color: #edf3fd;
+  line-height: 1.65;
+}
+
+.regulation-points-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.regulation-point-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 106, 0, 0.14);
+  color: #ffd8c2;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .fidelity-hero,
 .fidelity-controls-panel {
   padding: 24px;
   margin-bottom: 24px;
+}
+
+.fidelity-info-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  margin-bottom: 24px;
+  border-color: rgba(255, 154, 88, 0.24);
+  background:
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.16), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(67, 201, 168, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(8, 27, 55, 0.95), rgba(4, 18, 38, 0.97));
+}
+
+.fidelity-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fidelity-benefit-card {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+.fidelity-benefit-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.fidelity-benefit-tag,
+.fidelity-benefit-discount {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.fidelity-benefit-tag {
+  background: linear-gradient(135deg, #ff5b00 0%, #ff8a24 100%);
+  color: #fff7f1;
+  text-transform: uppercase;
+}
+
+.fidelity-benefit-discount {
+  background: rgba(255, 255, 255, 0.08);
+  color: #edf8f4;
+}
+
+.fidelity-benefit-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #edf3fd;
+  display: grid;
+  gap: 10px;
+  line-height: 1.55;
+}
+
+.fidelity-benefit-card-monthly {
+  border-color: rgba(255, 147, 72, 0.22);
+}
+
+.fidelity-benefit-card-quarterly {
+  border-color: rgba(255, 191, 98, 0.22);
+}
+
+.fidelity-benefit-card-semiannual {
+  border-color: rgba(110, 225, 200, 0.22);
+}
+
+.fidelity-benefit-card-annual {
+  border-color: rgba(107, 186, 255, 0.22);
 }
 
 .fidelity-store-highlight {
@@ -700,6 +905,150 @@ button:disabled {
 .calendar-panel {
   padding: 24px;
   margin-bottom: 24px;
+}
+
+.trainers-hero {
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.trainer-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.trainer-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.trainer-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.14), transparent 24%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  pointer-events: none;
+}
+
+.trainer-card:nth-child(3n + 2)::before {
+  background:
+    radial-gradient(circle at top left, rgba(99, 214, 255, 0.14), transparent 26%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+.trainer-card:nth-child(3n)::before {
+  background:
+    radial-gradient(circle at bottom right, rgba(67, 201, 168, 0.16), transparent 24%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+.trainer-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.trainer-card-media {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 106, 0, 0.18), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: var(--shadow);
+}
+
+.trainer-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.trainer-card-content {
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.trainer-card-heading {
+  display: grid;
+  gap: 8px;
+}
+
+.trainer-card-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2.3vw, 2.25rem);
+}
+
+.trainer-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.trainer-detail-block {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.trainer-detail-block-wide {
+  grid-column: 1 / -1;
+}
+
+.trainer-field-label {
+  display: inline-flex;
+  margin: 0 0 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff5b00 0%, #ff8a24 100%);
+  color: #fff7f1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.trainer-lead-copy {
+  margin: 0;
+  color: #fff8f1;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.28;
+}
+
+.trainer-detail-text {
+  margin: 0;
+  color: #edf3fd;
+  line-height: 1.7;
+}
+
+.trainer-distance-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.trainer-distance-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 106, 0, 0.14);
+  color: #ffe0cd;
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .calendar-race-list {
@@ -889,6 +1238,100 @@ button:disabled {
   margin-bottom: 24px;
 }
 
+.referral-info-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  margin-bottom: 24px;
+  border-color: rgba(255, 154, 88, 0.24);
+  background:
+    radial-gradient(circle at top left, rgba(255, 106, 0, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(61, 111, 255, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(8, 27, 55, 0.94), rgba(4, 18, 38, 0.96));
+}
+
+.referral-info-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.referral-info-copy,
+.referral-info-side {
+  min-width: 0;
+}
+
+.referral-info-lead {
+  margin-bottom: 18px;
+  color: #edf3fd;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.referral-benefit-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.referral-benefit-card,
+.referral-note-card {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+.referral-benefit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.referral-benefit-tag {
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff5b00 0%, #ff8a24 100%);
+  color: #fff7f1;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.referral-benefit-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.referral-benefit-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.referral-note-title {
+  margin-bottom: 12px;
+  color: #ffd8c2;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.referral-note-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #edf3fd;
+  display: grid;
+  gap: 12px;
+  line-height: 1.65;
+}
+
 .ranking-top-five {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -925,6 +1368,75 @@ button:disabled {
 .ranking-top-empty {
   margin: 0;
   color: var(--muted);
+}
+
+.referral-top-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.referral-top-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 106, 0, 0.16);
+  color: #ffe0cd;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.referral-level-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #edf3fd;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.referral-validity-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(87, 217, 172, 0.14);
+  color: #ddfff4;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.referral-validity-pill-expired {
+  background: rgba(255, 117, 117, 0.16);
+  color: #ffd8d8;
+}
+
+.referral-validity-note {
+  margin: 0;
+  color: #d8fff4;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.referral-validity-note-expired {
+  color: #ffd8d8;
 }
 
 .ranking-filters-stack {
@@ -1149,6 +1661,25 @@ button:disabled {
 }
 
 .fidelity-status-pill-unknown {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.fidelity-gift-pill {
+  font-weight: 700;
+}
+
+.fidelity-gift-pill-available {
+  background: rgba(255, 187, 87, 0.18);
+  color: #ffe8bf;
+}
+
+.fidelity-gift-pill-delivered {
+  background: rgba(65, 201, 141, 0.16);
+  color: #d8ffef;
+}
+
+.fidelity-gift-pill-unknown {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text);
 }
@@ -1520,6 +2051,27 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 
+  .regulation-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fidelity-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-info-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-card {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-card-media {
+    width: min(100%, 360px);
+    margin: 0 auto;
+  }
+
   .calendar-month-header {
     align-items: flex-start;
     flex-direction: column;
@@ -1542,15 +2094,45 @@ tbody tr:hover {
     padding-top: 20px;
   }
 
+  .top-nav {
+    gap: 10px;
+    flex-wrap: nowrap;
+    margin-bottom: 14px;
+    padding: 2px 2px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 106, 0, 0.45) transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .top-nav::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .top-nav::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(255, 106, 0, 0.45);
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    padding: 9px 14px;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
   .form-panel,
   .overview,
   .table-panel,
   .calendar-panel,
   .ranking-controls-panel,
   .ranking-hero,
+  .regulation-hero,
   .calendar-hero,
   .home-hero,
-  .highlights-hero {
+  .highlights-hero,
+  .trainers-hero {
     padding: 18px;
   }
 
@@ -1580,6 +2162,22 @@ tbody tr:hover {
 
   .ranking-top-card {
     padding: 14px 10px;
+  }
+
+  .referral-info-panel {
+    padding: 18px;
+  }
+
+  .fidelity-info-panel {
+    padding: 18px;
+  }
+
+  .trainer-card {
+    padding: 18px;
+  }
+
+  .trainer-detail-grid {
+    grid-template-columns: 1fr;
   }
 
   .athlete-avatar-top {

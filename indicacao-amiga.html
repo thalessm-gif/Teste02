@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indica&#231;&#227;o Amiga VC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="top-nav" aria-label="Navegacao principal">
+      <a href="index.html" class="nav-link">P&#225;gina inicial</a>
+      <a href="retirada-kits.html" class="nav-link">Retirada de Kits</a>
+      <a href="destaques-semanais.html" class="nav-link">Destaques Semanais</a>
+      <a href="ranking-circuito-riograndino.html" class="nav-link">Ranking Circuito</a>
+      <a href="calendario-provas.html" class="nav-link">Calend&#225;rio de Provas</a>
+      <a href="planos-fidelizacao.html" class="nav-link">Planos de Fideliza&#231;&#227;o</a>
+      <a href="treinadores.html" class="nav-link">Treinadores</a>
+    </nav>
+
+    <section class="brand-banner">
+      <div class="brand-pill">
+        <img src="assets/logo-vida-corrida.jpeg" alt="Logo Vida Corrida" class="brand-logo">
+        <div>
+          <p class="brand-name">VIDA CORRIDA</p>
+          <p class="brand-subtitle">"Os desafios nos definem."</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel ranking-hero">
+      <p class="eyebrow">&#193;rea 6</p>
+      <h1>Indica&#231;&#227;o Amiga</h1>
+      <p class="hero-text">
+        Veja quem mais trouxe amigos para a assessoria.
+      </p>
+    </section>
+
+    <section class="panel referral-info-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Programa</p>
+          <h2>Como funciona a Indica&#231;&#227;o Amiga</h2>
+        </div>
+        <span class="count-badge">Vantagens para quem indica</span>
+      </div>
+
+      <div class="referral-info-layout">
+        <div class="referral-info-copy">
+          <p class="referral-info-lead">
+            Traga o seu amigo para o time Vida Corrida e receba vantagens exclusivas. Ele ganha qualidade de vida, bem-estar e sa&#250;de e voc&#234; recebe desconto na aquisi&#231;&#227;o futura dos nossos planos e brindes.
+          </p>
+
+          <div class="referral-benefit-grid">
+            <article class="referral-benefit-card">
+              <div class="referral-benefit-tags">
+                <span class="referral-benefit-tag">N&#237;vel 1</span>
+                <span class="referral-benefit-tag">Cada indica&#231;&#227;o</span>
+              </div>
+              <strong>5% de desconto no plano trimestral</strong>
+              <p>Limite de 20% de desconto acumulado.</p>
+            </article>
+
+            <article class="referral-benefit-card">
+              <div class="referral-benefit-tags">
+                <span class="referral-benefit-tag">N&#237;vel 2</span>
+                <span class="referral-benefit-tag">5 indica&#231;&#245;es</span>
+              </div>
+              <strong>20% de desconto em qualquer plano de Corrida + 1 camiseta VC</strong>
+              <p>Uma recompensa especial para quem come&#231;a a movimentar a comunidade.</p>
+            </article>
+
+            <article class="referral-benefit-card">
+              <div class="referral-benefit-tags">
+                <span class="referral-benefit-tag">N&#237;vel 3</span>
+                <span class="referral-benefit-tag">10 indica&#231;&#245;es</span>
+              </div>
+              <strong>20% de desconto em qualquer plano de Corrida + 1 camiseta VC + 1 bermuda VC ou 1 inscri&#231;&#227;o em prova</strong>
+              <p>Verificar com a administra&#231;&#227;o quais provas est&#227;o abrangidas.</p>
+            </article>
+          </div>
+        </div>
+
+        <aside class="referral-info-side">
+          <article class="referral-note-card">
+            <p class="referral-note-title">Observa&#231;&#245;es</p>
+            <ul class="referral-note-list">
+              <li>O atleta indicado deve efetuar a contrata&#231;&#227;o de no m&#237;nimo um plano trimestral.</li>
+              <li>A contagem das indica&#231;&#245;es tem validade de 12 meses.</li>
+            </ul>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel ranking-top-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Top 5</p>
+          <h2>Atletas mais amigos</h2>
+        </div>
+        <span id="referral-top-status" class="count-badge">Aguardando dados</span>
+      </div>
+
+      <div id="referral-top-five" class="ranking-top-five" aria-live="polite">
+        <p class="ranking-top-empty">Conecte a planilha para visualizar o Top 5.</p>
+      </div>
+    </section>
+
+    <section class="panel ranking-controls-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Busca</p>
+          <h2>Encontre um atleta rapidamente</h2>
+        </div>
+        <span id="referral-sheet-status" class="count-badge">Aguardando planilha</span>
+      </div>
+
+      <div class="ranking-filters-stack">
+        <label class="field ranking-search-field">
+          <span>Buscar atleta</span>
+          <input id="referral-search" type="text" placeholder="Digite um nome para filtrar">
+        </label>
+      </div>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="overview-header">
+        <div>
+          <p class="eyebrow">Lista completa</p>
+          <h2>Ranking de indica&#231;&#245;es</h2>
+        </div>
+      </div>
+
+      <div class="table-wrapper ranking-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Atleta</th>
+              <th>Indica&#231;&#245;es</th>
+              <th>N&#237;vel</th>
+              <th>Vig&#234;ncia</th>
+            </tr>
+          </thead>
+          <tbody id="referral-table-body">
+            <tr>
+              <td colspan="5">Conecte a planilha em indicacao-amiga.js para visualizar as indica&#231;&#245;es.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="referral-card-list" class="ranking-card-list">
+        <article class="ranking-athlete-card">
+          <p class="ranking-card-empty">Conecte a planilha em indicacao-amiga.js para visualizar as indica&#231;&#245;es.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="avatar-preview-modal" class="avatar-preview-modal avatar-preview-modal-hidden" aria-hidden="true">
+    <div class="avatar-preview-backdrop" data-avatar-close></div>
+    <div class="avatar-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="avatar-preview-name">
+      <button type="button" class="avatar-preview-close" data-avatar-close aria-label="Fechar visualizacao da foto">&times;</button>
+      <div class="avatar-preview-media">
+        <img id="avatar-preview-image" src="" alt="" class="avatar-preview-image">
+      </div>
+      <p id="avatar-preview-name" class="avatar-preview-name"></p>
+    </div>
+  </div>
+
+  <script src="indicacao-amiga.js?v=20260407-8"></script>
+  <script>
+    (function () {
+      const referralTableBody = document.getElementById("referral-table-body");
+
+      if (!referralTableBody) {
+        return;
+      }
+
+      function normalizeReferralTableOrder() {
+        const rows = [...referralTableBody.querySelectorAll("tr")];
+
+        rows.forEach((row) => {
+          const cells = [...row.children];
+          if (cells.length !== 5) {
+            return;
+          }
+
+          const thirdCell = cells[2];
+          const fourthCell = cells[3];
+          const fifthCell = cells[4];
+          const looksLikeOldOrder =
+            Boolean(thirdCell.querySelector(".referral-level-pill")) ||
+            Boolean(fourthCell.querySelector(".referral-validity-pill"));
+
+          if (!looksLikeOldOrder) {
+            return;
+          }
+
+          row.replaceChildren(cells[0], cells[1], fifthCell, thirdCell, fourthCell);
+        });
+      }
+
+      normalizeReferralTableOrder();
+
+      const observer = new MutationObserver(() => {
+        normalizeReferralTableOrder();
+      });
+
+      observer.observe(referralTableBody, {
+        childList: true,
+        subtree: true
+      });
+    }());
+  </script>
+</body>
+</html>
