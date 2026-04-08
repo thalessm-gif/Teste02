@@ -8,6 +8,7 @@ window.VIDA_CORRIDA_AVATAR_DATA = {
     "byName":  {
                    "Adilson Marandini":  "adilson-marandini.jpg",
                    "Ana Milano":  "assets/avatars/ana_milano.jpg",
+                   "Camila Magroski":  "assets/avatars/camila_magroski.jpg",
                    "Carla Fenzke":  "carla-fenzke.jpg",
                    "Catia Fenzke":  "catia-fenzke.jpg",
                    "Cintia Campos":  "cintia_campos.jpg",
