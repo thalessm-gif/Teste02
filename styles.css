@@ -1938,8 +1938,8 @@ button:disabled {
 }
 
 .perfect-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 }
 
@@ -1953,6 +1953,31 @@ button:disabled {
   background: linear-gradient(135deg, rgba(255, 106, 0, 0.18), rgba(255, 255, 255, 0.04));
   color: #fff3eb;
   font-weight: 700;
+}
+
+.perfect-athlete-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 106, 0, 0.22);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 106, 0, 0.18), rgba(255, 255, 255, 0.04));
+  box-shadow: var(--shadow);
+}
+
+.perfect-athlete-card .athlete-avatar-table {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+.perfect-athlete-name {
+  margin: 0;
+  color: #fff3eb;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .week-chip-list {
