@@ -621,13 +621,12 @@ function normalizeAvatarValue(value) {
 }
 
 function resolveAvatarValue(value, { athleteId = "", athleteEmail = "", athleteName = "" } = {}) {
-  const directAvatar = normalizeAvatarValue(value);
-  if (directAvatar) {
-    return directAvatar;
+  const mappedAvatar = getMappedAvatarValue({ athleteId, athleteEmail, athleteName });
+  if (mappedAvatar) {
+    return normalizeAvatarValue(mappedAvatar);
   }
 
-  const mappedAvatar = getMappedAvatarValue({ athleteId, athleteEmail, athleteName });
-  return normalizeAvatarValue(mappedAvatar);
+  return normalizeAvatarValue(value);
 }
 
 function getMappedAvatarValue({ athleteId = "", athleteEmail = "", athleteName = "" } = {}) {
