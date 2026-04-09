@@ -27,6 +27,7 @@ window.VIDA_CORRIDA_AVATAR_DATA = {
                    "Luisa Pinto da Silva":  "luisa-pinto-da-silva.jpg",
                    "Miguel Angelo Castro Jr.":  "miguel_castro.jpg",
                    "Nathalia Vergara":  "nathalia-vergara.jpg",
+                   "Simone Castro De Oliveira":  "simone_castro.jpg",
                    "Thales Mirapalheta":  "thales-mirapalheta.jpg",
                    "Thales Soares Mirapalheta":  "thales-mirapalheta.jpg"
                }
