@@ -22,6 +22,7 @@ window.VIDA_CORRIDA_AVATAR_DATA = {
                    "Janaina Garcia Mascarenhas":  "janaina_mascarenhas.jpg",
                    "Joana Ribeiro":  "joana-ribeiro.jpg",
                    "Julio Araujo":  "julio-araujo.jpg",
+                   "Karen Christie Louro Mano":  "karen_christie.jpg",
                    "Lorraine Rosa":  "lorraine_rosa.jpg",
                    "Lorraine Silva Da Rosa":  "lorraine_rosa.jpg",
                    "Luisa Pinto da Silva":  "luisa-pinto-da-silva.jpg",
