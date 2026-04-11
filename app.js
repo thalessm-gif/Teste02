@@ -20,22 +20,24 @@ const shirtSummaryContainer = document.getElementById("shirt-summary");
 const tableBody = document.getElementById("entries-table-body");
 const totalCountElement = document.getElementById("total-count");
 const exportButton = document.getElementById("export-button");
-const submitButton = form.querySelector('button[type="submit"]');
+const submitButton = form ? form.querySelector('button[type="submit"]') : null;
 const statusBox = document.getElementById("status-box");
 const statusBoxTitle = document.getElementById("status-box-title");
 const statusBoxText = document.getElementById("status-box-text");
 const statusSpinner = document.getElementById("status-spinner");
 const preloadedAthleteNames = Array.isArray(window.KIT_ATHLETE_NAMES) ? window.KIT_ATHLETE_NAMES : [];
+const isKitWithdrawalLocked = typeof window.isKitWithdrawalLocked === "function" && window.isKitWithdrawalLocked();
 
 let entries = [];
 let distanceOptions = [...DEFAULT_DISTANCE_OPTIONS];
 let statusHideTimeoutId = null;
 
-renderDistanceOptions();
-render();
-initializeApp();
+if (!isKitWithdrawalLocked && form && exportButton && submitButton) {
+  renderDistanceOptions();
+  render();
+  initializeApp();
 
-form.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (isFormDisabled()) {
@@ -143,9 +145,9 @@ form.addEventListener("submit", async (event) => {
   } finally {
     setFormDisabled(false);
   }
-});
+  });
 
-exportButton.addEventListener("click", () => {
+  exportButton.addEventListener("click", () => {
   if (!entries.length) {
     showMessage("Ainda nao ha cadastros para exportar.", true);
     return;
@@ -171,7 +173,8 @@ exportButton.addEventListener("click", () => {
 
   URL.revokeObjectURL(downloadUrl);
   showMessage("Arquivo CSV exportado com sucesso.");
-});
+  });
+}
 
 async function initializeApp() {
   showMessage("Carregando cadastros...");
