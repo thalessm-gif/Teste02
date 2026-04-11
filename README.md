@@ -93,6 +93,15 @@ Para reabrir depois:
 
 Com isso, a pagina inicial mostra a area como trancada e a pagina `retirada-kits.html` passa a exibir uma mensagem de bloqueio sem carregar o formulario.
 
+Se quiser manter a pagina aberta e bloquear apenas o botao de envio:
+
+1. Abra `site-access-config.js`.
+2. Deixe `locked: false`.
+3. Altere `submitLocked: false` para `submitLocked: true`.
+4. Salve e publique/atualize o site.
+
+Para liberar o envio depois, troque `submitLocked: true` por `submitLocked: false`.
+
 ## Editor de avatares
 
 Para manter os caminhos dos avatares em um lugar so, o projeto agora usa o arquivo `avatar-map-data.js`.

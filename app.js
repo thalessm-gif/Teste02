@@ -26,7 +26,17 @@ const statusBoxTitle = document.getElementById("status-box-title");
 const statusBoxText = document.getElementById("status-box-text");
 const statusSpinner = document.getElementById("status-spinner");
 const preloadedAthleteNames = Array.isArray(window.KIT_ATHLETE_NAMES) ? window.KIT_ATHLETE_NAMES : [];
+const kitWithdrawalAccess =
+  typeof window.getKitWithdrawalAccess === "function"
+    ? window.getKitWithdrawalAccess()
+    : {};
 const isKitWithdrawalLocked = typeof window.isKitWithdrawalLocked === "function" && window.isKitWithdrawalLocked();
+const isKitWithdrawalSubmitLocked =
+  typeof window.isKitWithdrawalSubmitLocked === "function" && window.isKitWithdrawalSubmitLocked();
+const submitLockButtonText = String(kitWithdrawalAccess.submitButtonText || "Envio indisponivel");
+const submitLockMessage = String(
+  kitWithdrawalAccess.submitMessage || "O formulario continua visivel, mas o envio esta temporariamente bloqueado."
+);
 
 let entries = [];
 let distanceOptions = [...DEFAULT_DISTANCE_OPTIONS];
@@ -35,10 +45,16 @@ let statusHideTimeoutId = null;
 if (!isKitWithdrawalLocked && form && exportButton && submitButton) {
   renderDistanceOptions();
   render();
+  applySubmitLockState();
   initializeApp();
 
   form.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  if (isKitWithdrawalSubmitLocked) {
+    showMessage(submitLockMessage, true);
+    return;
+  }
 
   if (isFormDisabled()) {
     return;
@@ -240,6 +256,11 @@ async function initializeApp() {
     });
   } finally {
     setFormDisabled(false);
+    applySubmitLockState();
+
+    if (isKitWithdrawalSubmitLocked) {
+      showMessage(submitLockMessage, true);
+    }
   }
 }
 
@@ -811,12 +832,26 @@ function resetFormAfterSubmit() {
   fullNameInput.focus();
 }
 
+function applySubmitLockState() {
+  if (!submitButton || !isKitWithdrawalSubmitLocked) {
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = submitLockButtonText;
+  submitButton.title = submitLockMessage;
+}
+
 function setFormDisabled(disabled) {
   [fullNameInput, distanceInput, shirtSizeInput, submitButton, exportButton].forEach((element) => {
     if (element) {
       element.disabled = disabled;
     }
   });
+
+  if (!disabled) {
+    applySubmitLockState();
+  }
 }
 
 function isFormDisabled() {

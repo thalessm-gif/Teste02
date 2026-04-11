@@ -4,10 +4,16 @@ window.SITE_ACCESS_CONFIG = Object.freeze({
     // Para reabrir a area: false
     locked: false,
 
-    homeNotice: "A retirada de kits esta temporariamente indisponivel.",
+    // Para deixar a pagina aberta e bloquear apenas o envio: true
+    // Para liberar o envio novamente: false
+    submitLocked: true,
+
+    homeNotice: "A retirada de kits esta temporariamente indisponível.",
     homeLinkText: "Fechado temporariamente",
     pageTitle: "Retirada de Kits temporariamente fechada",
-    pageMessage: "Esta area esta bloqueada no momento. Em breve ela sera reaberta para novos acessos.",
-    pageSupport: "Se precisar de orientacao, fale com a equipe da assessoria."
+    pageMessage: "Esta área esta bloqueada no momento. Em breve ela será reaberta para novos acessos.",
+    pageSupport: "Se precisar de orientação, fale com o seu treinador.",
+    submitButtonText: "Envio indisponível",
+    submitMessage: "O formulário continua visível, mas o envio está temporariamente bloqueado."
   })
 });

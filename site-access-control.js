@@ -4,11 +4,14 @@
 
     return {
       locked: Boolean(source.locked),
+      submitLocked: Boolean(source.submitLocked),
       homeNotice: String(source.homeNotice || "A retirada de kits esta temporariamente indisponivel."),
       homeLinkText: String(source.homeLinkText || "Fechado temporariamente"),
       pageTitle: String(source.pageTitle || "Retirada de Kits temporariamente fechada"),
       pageMessage: String(source.pageMessage || "Esta area esta bloqueada no momento. Em breve ela sera reaberta para novos acessos."),
-      pageSupport: String(source.pageSupport || "Se precisar de orientacao, fale com a equipe da assessoria.")
+      pageSupport: String(source.pageSupport || "Se precisar de orientacao, fale com a equipe da assessoria."),
+      submitButtonText: String(source.submitButtonText || "Envio indisponivel"),
+      submitMessage: String(source.submitMessage || "O formulario continua visivel, mas o envio esta temporariamente bloqueado.")
     };
   }
 
@@ -76,6 +79,9 @@
   window.getKitWithdrawalAccess = getKitWithdrawalAccess;
   window.isKitWithdrawalLocked = function isKitWithdrawalLocked() {
     return access.locked;
+  };
+  window.isKitWithdrawalSubmitLocked = function isKitWithdrawalSubmitLocked() {
+    return access.submitLocked;
   };
 
   applyHomeCardLock(access);

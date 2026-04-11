@@ -670,6 +670,14 @@ button:disabled {
   transform: translateY(-1px);
 }
 
+.primary-button:disabled,
+.secondary-button:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .form-message {
   min-height: 24px;
   margin: 12px 0 0;
