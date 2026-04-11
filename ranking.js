@@ -1,9 +1,7 @@
-const RANKING_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10t1-ovZJxhwIPCW64IsOSpN1PPtDe9UZouuERrxUNEY/edit?usp=sharing";
-const RANKING_LEGACY_SHEET_NAME = "";
 const RANKING_SHEET_SOURCE =
   typeof window.getConsultaSheetSource === "function"
-    ? window.getConsultaSheetSource("ranking", RANKING_LEGACY_SHEET_URL, RANKING_LEGACY_SHEET_NAME)
-    : { url: RANKING_LEGACY_SHEET_URL, sheetName: RANKING_LEGACY_SHEET_NAME };
+    ? window.getConsultaSheetSource("ranking")
+    : { url: "", sheetName: "" };
 const RANKING_SHEET_URL = RANKING_SHEET_SOURCE.url;
 const RANKING_SHEET_NAME = RANKING_SHEET_SOURCE.sheetName;
 
@@ -102,7 +100,7 @@ function initializeRankingPage() {
 async function loadRankingFromSheet() {
   if (!RANKING_SHEET_URL) {
     setSheetStatus("Cole o link da planilha");
-    renderEmptyState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em ranking.js.");
+    renderEmptyState("Conecte a planilha em consulta-sheet-config.js para visualizar o ranking do circuito.");
     return;
   }
 
@@ -127,7 +125,7 @@ async function loadRankingFromSheet() {
     renderDistanceButtons([]);
     renderCategoryButtons([]);
     renderEmptyState(
-      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em ranking.js."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js."
     );
     setSheetStatus("Erro ao carregar");
   }

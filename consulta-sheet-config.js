@@ -1,7 +1,6 @@
 window.CONSULTA_SHEETS_CONFIG = Object.freeze({
   // Cole aqui o link da planilha unica usada pelas paginas de consulta.
-  // Deixe vazio para manter os links legados de cada modulo.
-  sharedSheetUrl: "",
+  sharedSheetUrl: "https://docs.google.com/spreadsheets/d/1Bxr01crqfhNSKmWUz2Tkw8hsYqgFcc_Se9x_MwejsRo/edit?usp=sharing",
 
   // Nomes das abas dentro da planilha unica de consultas.
   // A retirada de kits continua separada no app.js.
@@ -13,24 +12,16 @@ window.CONSULTA_SHEETS_CONFIG = Object.freeze({
   })
 });
 
-window.getConsultaSheetSource = function getConsultaSheetSource(key, fallbackUrl, fallbackSheetName) {
+window.getConsultaSheetSource = function getConsultaSheetSource(key) {
   const config = window.CONSULTA_SHEETS_CONFIG || {};
-  const sharedSheetUrl = String(config.sharedSheetUrl || "https://docs.google.com/spreadsheets/d/1Bxr01crqfhNSKmWUz2Tkw8hsYqgFcc_Se9x_MwejsRo/edit?usp=sharing").trim();
+  const sharedSheetUrl = String(config.sharedSheetUrl || "").trim();
   const sharedTabs = config.sharedTabs || {};
   const sharedTabName = String(sharedTabs[key] || "").trim();
 
-  if (sharedSheetUrl && sharedTabName) {
-    return {
-      url: sharedSheetUrl,
-      sheetName: sharedTabName,
-      mode: "shared"
-    };
-  }
-
   return {
-    url: String(fallbackUrl || "").trim(),
-    sheetName: String(fallbackSheetName || "").trim(),
-    mode: "legacy"
+    url: sharedSheetUrl,
+    sheetName: sharedTabName,
+    mode: "shared"
   };
 };
 

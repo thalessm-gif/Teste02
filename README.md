@@ -70,14 +70,12 @@ Depois de alterar essa propriedade, publique uma nova versao do aplicativo da we
 
 ## Planilhas de consulta centralizadas
 
-As paginas `Destaques Semanais`, `Ranking Circuito`, `Planos de Fidelizacao` e `Indicacao Amiga` agora podem usar uma unica planilha de leitura com varias abas.
+As paginas `Destaques Semanais`, `Ranking Circuito`, `Planos de Fidelizacao` e `Indicacao Amiga` usam uma unica planilha de leitura com varias abas.
 
 1. Abra o arquivo `consulta-sheet-config.js`.
 2. Preencha `sharedSheetUrl` com o link da planilha principal das consultas.
 3. Ajuste os nomes das abas em `sharedTabs` para bater com a sua estrutura.
 4. Mantenha a `Retirada de Kits` separada em `app.js`, porque ela continua usando o Apps Script proprio para escrita e sincronizacao.
-
-Enquanto `sharedSheetUrl` estiver vazio, cada pagina continua usando o link legado que ja estava configurado no respectivo arquivo `.js`.
 
 ## Editor de avatares
 

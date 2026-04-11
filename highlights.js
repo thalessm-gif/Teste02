@@ -1,9 +1,7 @@
-const HIGHLIGHTS_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/1totTCrCymqU5gpsuYMrRgYoHOCSfrVIP3B8xNy2JKlw/edit?usp=sharing";
-const HIGHLIGHTS_LEGACY_SHEET_NAME = "";
 const HIGHLIGHTS_SHEET_SOURCE =
   typeof window.getConsultaSheetSource === "function"
-    ? window.getConsultaSheetSource("highlights", HIGHLIGHTS_LEGACY_SHEET_URL, HIGHLIGHTS_LEGACY_SHEET_NAME)
-    : { url: HIGHLIGHTS_LEGACY_SHEET_URL, sheetName: HIGHLIGHTS_LEGACY_SHEET_NAME };
+    ? window.getConsultaSheetSource("highlights")
+    : { url: "", sheetName: "" };
 const HIGHLIGHTS_SHEET_URL = HIGHLIGHTS_SHEET_SOURCE.url;
 const HIGHLIGHTS_SHEET_NAME = HIGHLIGHTS_SHEET_SOURCE.sheetName;
 
@@ -54,7 +52,7 @@ async function loadHighlightsFromSheet() {
     renderPerfectMessage(
       "Assim que voce conectar a planilha, esta area vai mostrar quem esteve em destaque em todas as semanas."
     );
-    renderErrorState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em highlights.js.");
+    renderErrorState("Conecte a planilha em consulta-sheet-config.js para visualizar os dados.");
     return;
   }
 
@@ -88,7 +86,7 @@ async function loadHighlightsFromSheet() {
       "Nao foi possivel confirmar os atletas 100% ativos porque a leitura da planilha falhou."
     );
     renderErrorState(
-      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em highlights.js."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js."
     );
   }
 }

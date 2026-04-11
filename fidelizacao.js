@@ -1,9 +1,7 @@
-const FIDELITY_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ms5k9CZZhfSKQGxv3oIh0fDq-skaUqO7Dxj0_2k0d1s/edit?usp=sharing";
-const FIDELITY_LEGACY_SHEET_NAME = "";
 const FIDELITY_SHEET_SOURCE =
   typeof window.getConsultaSheetSource === "function"
-    ? window.getConsultaSheetSource("fidelity", FIDELITY_LEGACY_SHEET_URL, FIDELITY_LEGACY_SHEET_NAME)
-    : { url: FIDELITY_LEGACY_SHEET_URL, sheetName: FIDELITY_LEGACY_SHEET_NAME };
+    ? window.getConsultaSheetSource("fidelity")
+    : { url: "", sheetName: "" };
 const FIDELITY_SHEET_URL = FIDELITY_SHEET_SOURCE.url;
 const FIDELITY_SHEET_NAME = FIDELITY_SHEET_SOURCE.sheetName;
 
@@ -90,7 +88,7 @@ function initializeFidelityPage() {
 async function loadFidelityFromSheet() {
   if (!FIDELITY_SHEET_URL) {
     setFidelitySheetStatus("Cole o link da planilha");
-    renderFidelityEmptyState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em fidelizacao.js.");
+    renderFidelityEmptyState("Conecte a planilha em consulta-sheet-config.js para visualizar os planos de fidelizacao.");
     return;
   }
 
@@ -117,7 +115,7 @@ async function loadFidelityFromSheet() {
     fidelityPlans = [];
     renderFidelityPlanButtons([]);
     renderFidelityEmptyState(
-      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em fidelizacao.js."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js."
     );
     setFidelitySheetStatus("Erro ao carregar");
   }

@@ -1,9 +1,7 @@
-const REFERRAL_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/11ZhjGBirkPaLFTCcS0_syVUiqR_d90cjGXeDT0yzcv8/edit?usp=sharing";
-const REFERRAL_LEGACY_SHEET_NAME = "";
 const REFERRAL_SHEET_SOURCE =
   typeof window.getConsultaSheetSource === "function"
-    ? window.getConsultaSheetSource("referral", REFERRAL_LEGACY_SHEET_URL, REFERRAL_LEGACY_SHEET_NAME)
-    : { url: REFERRAL_LEGACY_SHEET_URL, sheetName: REFERRAL_LEGACY_SHEET_NAME };
+    ? window.getConsultaSheetSource("referral")
+    : { url: "", sheetName: "" };
 const REFERRAL_SHEET_URL = REFERRAL_SHEET_SOURCE.url;
 const REFERRAL_SHEET_NAME = REFERRAL_SHEET_SOURCE.sheetName;
 
@@ -50,7 +48,7 @@ function initializeReferralPage() {
 async function loadReferralRankingFromSheet() {
   if (!REFERRAL_SHEET_URL) {
     setReferralSheetStatus("Cole o link da planilha");
-    renderReferralEmptyState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em indicacao-amiga.js.");
+    renderReferralEmptyState("Conecte a planilha em consulta-sheet-config.js para visualizar a Indicacao Amiga.");
     return;
   }
 
@@ -71,7 +69,7 @@ async function loadReferralRankingFromSheet() {
     console.error("Erro ao carregar Indicacao Amiga:", error);
     referralEntries = [];
     renderReferralEmptyState(
-      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em indicacao-amiga.js."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js."
     );
     setReferralSheetStatus("Erro ao carregar");
   }
