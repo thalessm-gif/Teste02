@@ -1,6 +1,11 @@
-// Cole aqui o link da planilha do ranking ou o link de exportacao CSV.
-const RANKING_SHEET_URL = "https://docs.google.com/spreadsheets/d/10t1-ovZJxhwIPCW64IsOSpN1PPtDe9UZouuERrxUNEY/edit?usp=sharing";
-const RANKING_SHEET_NAME = "";
+const RANKING_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/10t1-ovZJxhwIPCW64IsOSpN1PPtDe9UZouuERrxUNEY/edit?usp=sharing";
+const RANKING_LEGACY_SHEET_NAME = "";
+const RANKING_SHEET_SOURCE =
+  typeof window.getConsultaSheetSource === "function"
+    ? window.getConsultaSheetSource("ranking", RANKING_LEGACY_SHEET_URL, RANKING_LEGACY_SHEET_NAME)
+    : { url: RANKING_LEGACY_SHEET_URL, sheetName: RANKING_LEGACY_SHEET_NAME };
+const RANKING_SHEET_URL = RANKING_SHEET_SOURCE.url;
+const RANKING_SHEET_NAME = RANKING_SHEET_SOURCE.sheetName;
 
 const sheetStatusElement = document.getElementById("ranking-sheet-status");
 const searchInputElement = document.getElementById("ranking-search");
@@ -97,13 +102,13 @@ function initializeRankingPage() {
 async function loadRankingFromSheet() {
   if (!RANKING_SHEET_URL) {
     setSheetStatus("Cole o link da planilha");
-    renderEmptyState("Conecte a planilha em ranking.js para visualizar o ranking do circuito.");
+    renderEmptyState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em ranking.js.");
     return;
   }
 
   try {
     setSheetStatus("Carregando planilha...");
-    const csvUrl = buildCsvUrl(RANKING_SHEET_URL);
+    const csvUrl = buildCsvUrl(RANKING_SHEET_URL, RANKING_SHEET_NAME);
     const response = await fetch(`${csvUrl}${csvUrl.includes("?") ? "&" : "?"}ts=${Date.now()}`);
 
     if (!response.ok) {
@@ -122,7 +127,7 @@ async function loadRankingFromSheet() {
     renderDistanceButtons([]);
     renderCategoryButtons([]);
     renderEmptyState(
-      "Nao foi possivel carregar a planilha. Verifique o link em ranking.js e confirme se a base esta acessivel."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em ranking.js."
     );
     setSheetStatus("Erro ao carregar");
   }
@@ -776,9 +781,13 @@ function normalizeHeader(value) {
     .replace(/\s+/g, " ");
 }
 
-function buildCsvUrl(sheetUrl) {
+function buildCsvUrl(sheetUrl, sheetName) {
+  if (typeof window.buildGoogleSheetCsvUrl === "function") {
+    return window.buildGoogleSheetCsvUrl(sheetUrl, sheetName);
+  }
+
   const safeUrl = String(sheetUrl || "").trim();
-  const safeSheetName = String(RANKING_SHEET_NAME || "").trim();
+  const safeSheetName = String(sheetName || "").trim();
 
   if (!safeUrl) {
     return "";

@@ -1,5 +1,11 @@
-const FIDELITY_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ms5k9CZZhfSKQGxv3oIh0fDq-skaUqO7Dxj0_2k0d1s/edit?usp=sharing";
-const FIDELITY_SHEET_NAME = "";
+const FIDELITY_LEGACY_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ms5k9CZZhfSKQGxv3oIh0fDq-skaUqO7Dxj0_2k0d1s/edit?usp=sharing";
+const FIDELITY_LEGACY_SHEET_NAME = "";
+const FIDELITY_SHEET_SOURCE =
+  typeof window.getConsultaSheetSource === "function"
+    ? window.getConsultaSheetSource("fidelity", FIDELITY_LEGACY_SHEET_URL, FIDELITY_LEGACY_SHEET_NAME)
+    : { url: FIDELITY_LEGACY_SHEET_URL, sheetName: FIDELITY_LEGACY_SHEET_NAME };
+const FIDELITY_SHEET_URL = FIDELITY_SHEET_SOURCE.url;
+const FIDELITY_SHEET_NAME = FIDELITY_SHEET_SOURCE.sheetName;
 
 const FIDELITY_PLAN_ORDER = ["Mensal", "Trimestral", "Semestral", "Anual"];
 const FIDELITY_STATUS_LABELS = {
@@ -84,7 +90,7 @@ function initializeFidelityPage() {
 async function loadFidelityFromSheet() {
   if (!FIDELITY_SHEET_URL) {
     setFidelitySheetStatus("Cole o link da planilha");
-    renderFidelityEmptyState("Conecte a planilha em fidelizacao.js para visualizar os planos de fidelizacao.");
+    renderFidelityEmptyState("Conecte a planilha em consulta-sheet-config.js ou ajuste o fallback em fidelizacao.js.");
     return;
   }
 
@@ -111,7 +117,7 @@ async function loadFidelityFromSheet() {
     fidelityPlans = [];
     renderFidelityPlanButtons([]);
     renderFidelityEmptyState(
-      "Nao foi possivel carregar a planilha. Verifique o link em fidelizacao.js e confirme se a base esta acessivel."
+      "Nao foi possivel carregar a planilha. Verifique consulta-sheet-config.js ou o fallback em fidelizacao.js."
     );
     setFidelitySheetStatus("Erro ao carregar");
   }
@@ -667,6 +673,10 @@ function normalizeHeader(value) {
 }
 
 function buildCsvUrl(sheetUrl, sheetName) {
+  if (typeof window.buildGoogleSheetCsvUrl === "function") {
+    return window.buildGoogleSheetCsvUrl(sheetUrl, sheetName);
+  }
+
   const safeUrl = String(sheetUrl || "").trim();
   const safeSheetName = String(sheetName || "").trim();
 
